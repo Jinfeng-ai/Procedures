@@ -8,3 +8,59 @@ Note:
 2.我想要一个具有这些输入并产生这些输出的组合逻辑块；
 3.我想要一组组合的逻辑块，后面跟一组触发器。
 组合逻辑（如逻辑门）无法记住任何状态。
+组合电路必须在所有情况下都为所有输出分配一个值。这通常意味着你始终需要else语句或分配给输出的默认值。
+
+
+//正确运行的代码：
+// synthesis verilog_input_version verilog_2001
+module top_module (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving  ); //
+
+    always @(*) begin
+        if (cpu_overheated == 1'b1)
+           shut_off_computer = 1'b1;
+        else
+           shut_off_computer = 1'b0;
+    end
+
+    always @(*) begin
+        if ((arrived == 1'b0) && (gas_tank_empty == 1'b0))
+           keep_driving = 1'b1;
+        else
+           keep_driving = 1'b0;
+    end
+
+endmodule
+
+
+//我写的有问题的代码：（之后复习的时候还是可以发现问题的。）
+// synthesis verilog_input_version verilog_2001
+module top_module (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving  ); //
+
+    always @(*) begin
+        if (cpu_overheated)
+           shut_off_computer = 1;
+        else
+           shut_off_computer = 0;//这一步是自己想到的。
+    end
+
+    always @(*) begin
+        if (~arrived)
+           keep_driving = ~gas_tank_empty;
+        else
+           keep_driving = gas_tank_empty;//这一步，因没有明白是什么意思，也就没写出来，看过参考答案
+    end                                  //写出，但是还有点小问题。
+
+endmodule
+
+//题目分析：题目给了两个场景让我们来修改bug，这两种场景对应着使用if-else时产生锁存器latch的情况，
+我们只需要理清这两个场景中各变量的关系编写判断语句即可，题目中也有给出判断的条件。
