@@ -1,0 +1,133 @@
+# Procedures
+过程包括始终，初始，任务和功能块。 过程允许使用顺序语句（不能在过程外部使用）来描述电路的行为。
+
+20210120
+Verilog中的case语句几乎等同于if-elseifelse的序列，该序列将一个表达式与另一个表达式进行比较，
+它的语法和功能与C中的switch语句不同。
+
+
+//题目分析：
+用case语句写一个多路选择器，当sel在0-5之间时输出对应的data0-5，其他情况输出0。
+注意：1.endcase不要忘记；2.输出位宽的问题。
+
+
+//我的代码：
+//第一版本：
+// synthesis verilog_input_version verilog_2001
+module top_module ( 
+    input [2:0] sel, 
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            4'b0000:begin
+                    out = 0;
+                    end
+            4'b0001:begin
+                    out = 1;
+                    end
+            4'b0010:begin
+                    out = 2;
+                    end
+            4'b0011:begin
+                    out = 3;
+                    end
+            4'b0100:begin
+                    out = 4;
+                    end
+            4'b0101:begin
+                    out = 5;
+                    end
+            default: out = 4'b0000;
+        endcase
+    end
+
+endmodule
+
+//第二版本：
+// synthesis verilog_input_version verilog_2001
+module top_module ( 
+    input [2:0] sel, 
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            4'b0000: begin
+                     out = 4'b0000;
+                     end
+            4'b0001:begin
+                    out = 4'b0001;
+                    end
+            4'b0010:begin
+                    out = 4'b0010;
+                    end
+            4'b0011:begin
+                    out = 4'b0011;
+                    end
+            4'b0100:begin
+                    out = 4'b0100;
+                    end
+            4'b0101:begin
+                    out = 4'b0101;
+                    end
+            default: out = 1'bx;
+        endcase
+    end
+
+endmodule
+
+
+//我的总结：
+1.第一次代码，每次输出的是数字，没有实际依据，感觉是错误的；
+看了参考答案改成第二版本，还是有问题的，但是这次不清楚。好像没读明白题目的意思。
+
+
+//查到的答案：
+// synthesis verilog_input_version verilog_2001
+module top_module ( 
+    input [2:0] sel, 
+    input [3:0] data0,
+    input [3:0] data1,
+    input [3:0] data2,
+    input [3:0] data3,
+    input [3:0] data4,
+    input [3:0] data5,
+    output reg [3:0] out   );//
+
+    always@(*) begin  // This is a combinational circuit
+        case(sel)
+            4'b0000: begin
+                     out = data0;
+                     end
+            4'b0001:begin
+                    out = data1;
+                    end
+            4'b0010:begin
+                    out = data2;
+                    end
+            4'b0011:begin
+                    out = data3;
+                    end
+            4'b0100:begin
+                    out = data4;
+                    end
+            4'b0101:begin
+                    out = data5;
+                    end
+            default: out = 4'b0000;
+        endcase
+    end
+
+endmodule
