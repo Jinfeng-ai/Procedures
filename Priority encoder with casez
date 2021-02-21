@@ -1,0 +1,30 @@
+# Procedures
+过程包括始终，初始，任务和功能块。 过程允许使用顺序语句（不能在过程外部使用）来描述电路的行为。
+
+题目解释：
+为8位输入构建优先级编码器。根据上一个练习（always_case2），case语句中将有256个案例。 如果case语句中
+支持的case项目无关紧要，我们可以减少这种情况（减少到9个case）。 这就是casez的目的：在比较中，将值z视为无关位。
+
+// synthesis verilog_input_version verilog_2001
+module top_module (
+    input [7:0] in,
+    output reg [2:0] pos  );
+    
+    always @(*)begin
+        casez (in[7:0])
+            8'bzzzzzzz1: pos = 0;
+            8'bzzzzzz1z: pos = 1;
+            8'bzzzzz1zz: pos = 2;
+            8'bzzzz1zzz: pos = 3;
+            8'bzzz1zzzz: pos = 4;
+            8'bzz1zzzzz: pos = 5;
+            8'bz1zzzzzz: pos = 6;
+            8'b1zzzzzzz: pos = 7; 
+            default: pos  =0;
+        endcase
+    end
+
+endmodule
+
+总结：
+这个是我根据题目意思，自己写出来的，很开心，哈哈哈。
